@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0061)blob:https://www.kimi.ai/a80e0b83-83e3-4a1c-9ed7-f5bf0bd4e081 -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,23 +7,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
 <title>Multiplication Quiz</title>
 <style>
-  /* Standalone fallbacks so the app works outside the Kimi app */
+  /* Colours, fonts and animation timings */
   :root {
-    --kimi-color-text-primary: #1a1a1a;
-    --kimi-color-text-secondary: #555;
-    --kimi-color-text-tertiary: #888;
-    --kimi-color-text-quaternary: #aaa;
-    --kimi-color-surface: #ffffff;
-    --kimi-color-surface-muted: #f2f2f2;
-    --kimi-color-surface-raised: #fafafa;
-    --kimi-color-surface-strong: #e8e8e8;
-    --kimi-color-border: #ddd;
-    --kimi-color-danger: #d64545;
-    --kimi-color-positive: #2e9e5b;
-    --kimi-color-warning: #d99a2b;
-    --kimi-color-accent: #3b6fd4;
-    --kimi-font-sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --kimi-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #555;
+    --color-text-tertiary: #888;
+    --color-text-quaternary: #aaa;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f2f2f2;
+    --color-surface-raised: #fafafa;
+    --color-surface-strong: #e8e8e8;
+    --color-border: #ddd;
+    --color-danger: #d64545;
+    --color-positive: #2e9e5b;
+    --color-warning: #d99a2b;
+    --color-accent: #3b6fd4;
+    --font-sans: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     --t-micro: 60ms; --t-fast: 120ms; --t-normal: 200ms; --t-slow: 300ms;
     --ease-out: cubic-bezier(.2,.8,.4,1); --ease-in: cubic-bezier(.5,0,.8,.4); --ease-standard: cubic-bezier(.4,0,.2,1);
   }
@@ -33,89 +32,89 @@
 <!--<base target="_blank">--><base href="." target="_blank">
 </head>
 <body>
-<div id="app" style="font-family:var(--kimi-font-sans);max-width:820px;margin:0 auto;">
+<div id="app" style="font-family:var(--font-sans);max-width:820px;margin:0 auto;">
 <style>
   button, input { font: inherit; }
   .hidden { display: none; }
   .center { text-align: center; }
   h1 { font-family: "Schoolbell", "Chalkboard SE", "Comic Sans MS", cursive; font-size: 40px; font-weight: 400; margin: 0 0 8px; }
-  p.sub { color: var(--kimi-color-text-secondary); font-size: 14px; margin: 0 0 24px; }
+  p.sub { color: var(--color-text-secondary); font-size: 14px; margin: 0 0 24px; }
   .btn {
-    background: var(--kimi-color-text-primary); color: var(--kimi-color-surface);
+    background: var(--color-text-primary); color: var(--color-surface);
     border: none; border-radius: 10px; padding: 12px 24px; font-size: 16px; font-weight: 500;
     cursor: pointer; transition: opacity var(--t-fast) var(--ease-out);
   }
   .btn:hover { opacity: .85; }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn.secondary { background: transparent; color: var(--kimi-color-text-primary); border: 1px solid var(--kimi-color-border); }
-  .card { border: 1px solid var(--kimi-color-border); border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: left; }
-  .card .lbl { font-size: 13px; color: var(--kimi-color-text-tertiary); margin-bottom: 10px; }
+  .btn.secondary { background: transparent; color: var(--color-text-primary); border: 1px solid var(--color-border); }
+  .card { border: 1px solid var(--color-border); border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: left; }
+  .card .lbl { font-size: 13px; color: var(--color-text-tertiary); margin-bottom: 10px; }
   .tables { display: flex; gap: 8px; flex-wrap: wrap; }
   .tbl {
     display: flex; align-items: center; gap: 6px; padding: 8px 12px;
-    border: 1px solid var(--kimi-color-border); border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--color-border); border-radius: 8px; cursor: pointer;
     font-size: 15px; font-variant-numeric: tabular-nums; user-select: none;
     transition: border-color var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out);
   }
-  .tbl.on { border-color: var(--kimi-color-text-primary); background: var(--kimi-color-surface-muted); font-weight: 500; }
+  .tbl.on { border-color: var(--color-text-primary); background: var(--color-surface-muted); font-weight: 500; }
   .tbl.all { border-style: dashed; }
-  .easy { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 14px; color: var(--kimi-color-text-secondary); cursor: pointer; user-select: none; }
-  .easy input { accent-color: var(--kimi-color-text-primary); width: 16px; height: 16px; margin: 0; }
-  .tbl input { accent-color: var(--kimi-color-text-primary); width: 16px; height: 16px; margin: 0; }
+  .easy { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 14px; color: var(--color-text-secondary); cursor: pointer; user-select: none; }
+  .easy input { accent-color: var(--color-text-primary); width: 16px; height: 16px; margin: 0; }
+  .tbl input { accent-color: var(--color-text-primary); width: 16px; height: 16px; margin: 0; }
   .nums { display: flex; gap: 16px; flex-wrap: wrap; }
   .num { flex: 1; min-width: 140px; }
   .num input {
     width: 100%; box-sizing: border-box; padding: 8px 12px; font-size: 16px; text-align: center;
-    border: 1px solid var(--kimi-color-border); border-radius: 10px; background: transparent;
-    color: var(--kimi-color-text-primary); font-variant-numeric: tabular-nums; outline: none;
+    border: 1px solid var(--color-border); border-radius: 10px; background: transparent;
+    color: var(--color-text-primary); font-variant-numeric: tabular-nums; outline: none;
   }
-  .num input:focus { border-color: var(--kimi-color-text-primary); }
+  .num input:focus { border-color: var(--color-text-primary); }
   #perPreview { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
-  #perPreview span { color: var(--kimi-color-text-tertiary); font-weight: 400; }
-  #cfgError { color: var(--kimi-color-danger); font-size: 13px; min-height: 20px; margin: 4px 0 12px; }
+  #perPreview span { color: var(--color-text-tertiary); font-weight: 400; }
+  #cfgError { color: var(--color-danger); font-size: 13px; min-height: 20px; margin: 4px 0 12px; }
   #screen-quiz.quiz { display: flex; flex-direction: column; max-height: 70vh; }
-  .topbar { flex: none; background: var(--kimi-color-surface); z-index: 5; border-bottom: 1px solid var(--kimi-color-border); padding: 8px 0 12px; }
+  .topbar { flex: none; background: var(--color-surface); z-index: 5; border-bottom: 1px solid var(--color-border); padding: 8px 0 12px; }
   #screen-quiz.quiz .sheet { flex: 1 1 auto; overflow-y: auto; min-height: 0; padding: 12px 4px 0 0; }
   #screen-quiz .actions { flex: none; }
   .bar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   #timer { font-size: 32px; font-weight: 500; font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
-  #timer.low { color: var(--kimi-color-danger); }
-  .meta { color: var(--kimi-color-text-tertiary); font-size: 13px; font-variant-numeric: tabular-nums; }
-  .track { height: 4px; background: var(--kimi-color-surface-muted); border-radius: 4px; overflow: hidden; margin-top: 8px; }
-  .fill { height: 100%; background: var(--kimi-color-text-primary); width: 0%; transition: width var(--t-normal) var(--ease-out); }
+  #timer.low { color: var(--color-danger); }
+  .meta { color: var(--color-text-tertiary); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .track { height: 4px; background: var(--color-surface-muted); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+  .fill { height: 100%; background: var(--color-text-primary); width: 0%; transition: width var(--t-normal) var(--ease-out); }
   .sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 16px; }
   .q { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; border: 1px solid transparent; }
-  .q .n { color: var(--kimi-color-text-quaternary); font-size: 12px; width: 28px; font-variant-numeric: tabular-nums; }
+  .q .n { color: var(--color-text-quaternary); font-size: 12px; width: 28px; font-variant-numeric: tabular-nums; }
   .q .expr { font-family: "Schoolbell", "Chalkboard SE", "Comic Sans MS", cursive; font-size: 20px; white-space: nowrap; }
   .q input {
     width: 52px; padding: 4px 6px; font-size: 15px; text-align: center;
-    border: 1px solid var(--kimi-color-border); border-radius: 8px; background: transparent;
-    color: var(--kimi-color-text-primary); font-variant-numeric: tabular-nums; outline: none;
+    border: 1px solid var(--color-border); border-radius: 8px; background: transparent;
+    color: var(--color-text-primary); font-variant-numeric: tabular-nums; outline: none;
   }
-  .q input:focus { border-color: var(--kimi-color-text-primary); }
-  .q.active { border-color: var(--kimi-color-text-primary); }
-  .q.done input { border-color: var(--kimi-color-positive); }
+  .q input:focus { border-color: var(--color-text-primary); }
+  .q.active { border-color: var(--color-text-primary); }
+  .q.done input { border-color: var(--color-positive); }
   .chip {
     margin-left: auto; font-size: 12px; padding: 2px 8px; border-radius: 6px;
-    border: 1px solid var(--kimi-color-border); color: var(--kimi-color-text-tertiary);
+    border: 1px solid var(--color-border); color: var(--color-text-tertiary);
     font-variant-numeric: tabular-nums; min-width: 36px; text-align: center;
   }
-  .q.active .chip { border-color: var(--kimi-color-text-primary); color: var(--kimi-color-text-primary); font-weight: 500; }
-  .chip.done { border-color: var(--kimi-color-positive); color: var(--kimi-color-positive); }
-  .chip.late { border-color: var(--kimi-color-warning); color: var(--kimi-color-warning); }
+  .q.active .chip { border-color: var(--color-text-primary); color: var(--color-text-primary); font-weight: 500; }
+  .chip.done { border-color: var(--color-positive); color: var(--color-positive); }
+  .chip.late { border-color: var(--color-warning); color: var(--color-warning); }
   .actions { margin-top: 20px; display: flex; gap: 12px; justify-content: center; }
   .big { font-size: 42px; font-weight: 500; font-variant-numeric: tabular-nums; margin: 8px 0 4px; }
   .stats { display: flex; gap: 24px; justify-content: center; margin: 16px 0 24px; flex-wrap: wrap; }
   .stat .v { font-size: 24px; font-weight: 500; font-variant-numeric: tabular-nums; }
-  .stat .l { font-size: 13px; color: var(--kimi-color-text-tertiary); }
+  .stat .l { font-size: 13px; color: var(--color-text-tertiary); }
   .review-title { font-size: 15px; font-weight: 500; margin: 0 0 8px; }
-  .review { max-height: 220px; overflow: auto; border: 1px solid var(--kimi-color-border); border-radius: 12px; padding: 8px 12px; }
-  .review .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; border-bottom: 1px solid var(--kimi-color-surface-muted); }
+  .review { max-height: 220px; overflow: auto; border: 1px solid var(--color-border); border-radius: 12px; padding: 8px 12px; }
+  .review .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; border-bottom: 1px solid var(--color-surface-muted); }
   .review .row:last-child { border-bottom: none; }
   .review .ans { font-variant-numeric: tabular-nums; }
-  .review .right { color: var(--kimi-color-positive); }
-  .review .wrong { color: var(--kimi-color-danger); }
-  .review .missed { color: var(--kimi-color-warning); }
+  .review .right { color: var(--color-positive); }
+  .review .wrong { color: var(--color-danger); }
+  .review .missed { color: var(--color-warning); }
   #slowWrap { margin-bottom: 20px; }
   .review.slow { max-height: none; }
   .review .secs { font-weight: 500; font-variant-numeric: tabular-nums; }
@@ -140,7 +139,7 @@
         <div class="num"><input type="number" id="cfgCount" value="60" min="1" max="200"></div>
         <div class="num"><input type="number" id="cfgMinutes" value="10" min="1" max="60"></div>
       </div>
-      <div style="display:flex;gap:16px;margin-top:6px;font-size:12px;color:var(--kimi-color-text-quaternary);">
+      <div style="display:flex;gap:16px;margin-top:6px;font-size:12px;color:var(--color-text-quaternary);">
         <span style="flex:1;min-width:140px;text-align:center;">problems</span>
         <span style="flex:1;min-width:140px;text-align:center;">minutes</span>
       </div>
