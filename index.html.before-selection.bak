@@ -38,7 +38,7 @@
   button, input { font: inherit; }
   .hidden { display: none; }
   .center { text-align: center; }
-  h1 { font-family: "Schoolbell", "Chalkboard SE", "Comic Sans MS", cursive; font-size: 40px; font-weight: 400; margin: 0 0 8px; }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 8px; }
   p.sub { color: var(--kimi-color-text-secondary); font-size: 14px; margin: 0 0 24px; }
   .btn {
     background: var(--kimi-color-text-primary); color: var(--kimi-color-surface);
@@ -59,8 +59,6 @@
   }
   .tbl.on { border-color: var(--kimi-color-text-primary); background: var(--kimi-color-surface-muted); font-weight: 500; }
   .tbl.all { border-style: dashed; }
-  .easy { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 14px; color: var(--kimi-color-text-secondary); cursor: pointer; user-select: none; }
-  .easy input { accent-color: var(--kimi-color-text-primary); width: 16px; height: 16px; margin: 0; }
   .tbl input { accent-color: var(--kimi-color-text-primary); width: 16px; height: 16px; margin: 0; }
   .nums { display: flex; gap: 16px; flex-wrap: wrap; }
   .num { flex: 1; min-width: 140px; }
@@ -131,7 +129,6 @@
       <div class="tables" id="tableChips">
         <label class="tbl all" id="allChip"><input type="checkbox" id="allTables">All</label>
       </div>
-      <label class="easy"><input type="checkbox" id="includeEasy">Include easy problems (×0 and ×1)</label>
     </div>
 
     <div class="card">
@@ -203,7 +200,6 @@
   var problems = [], answers = [], chips = [], rows = [], inputs = [];
   var tick = null, ptick = null, remaining = TOTAL, startTime = 0;
   var active = -1, perRemain = PER;
-  var includeEasy = false;
   var times = [], activeSince = 0;   // seconds spent on each problem
 
   var $ = function (id) { return document.getElementById(id); };
@@ -274,7 +270,6 @@
     selFactors = Array.prototype.filter.call(document.querySelectorAll('.factor'), function (c) { return c.checked; })
       .map(function (c) { return +c.value; });
     COUNT = parseInt($('cfgCount').value, 10);
-    includeEasy = $('includeEasy').checked;
     TOTAL = (parseInt($('cfgMinutes').value, 10) || 0) * 60;
     var err = '';
     if (!selFactors.length) err = 'Pick at least one times table.';
@@ -285,40 +280,22 @@
   }
 
   /* ---- problem generation: chosen tables x 0-12 ---- */
-  /* ---- problem generation ----
-     - problems are split evenly across the chosen tables (any leftover goes to random tables)
-     - ×0 and ×1 are skipped unless "Include easy problems" is ticked
-     - a fact is not repeated in either order (3×8 and 8×3 count as the same) unless
-       the test asks for more problems than there are distinct facts
-     - each problem is randomly shown either way round (8 × 7 or 7 × 8) */
   function makeProblems() {
-    var mults = [];
-    for (var m = 0; m <= 12; m++) if (includeEasy || m > 1) mults.push(m);
-
-    var order = shuffle(selFactors.slice());
-    var base = Math.floor(COUNT / order.length), extra = COUNT % order.length;
-    var quota = {}, decks = {}, used = {};
-    order.forEach(function (f, i) {
-      quota[f] = base + (i < extra ? 1 : 0);
-      decks[f] = shuffle(mults.slice());
+    var pool = [];
+    selFactors.forEach(function (f) {
+      for (var m = 0; m <= 12; m++) pool.push([f, m]);
     });
-
-    function key(a, b) { return Math.min(a, b) + 'x' + Math.max(a, b); }
-
-    function pick(f) {
-      if (!decks[f].length) decks[f] = shuffle(mults.slice());
-      var d = decks[f], idx = 0;
-      for (var k = 0; k < d.length; k++) if (!used[key(f, d[k])]) { idx = k; break; }
-      var m = d.splice(idx, 1)[0];
-      used[key(f, m)] = true;
-      return Math.random() < 0.5 ? [f, m] : [m, f];
-    }
-
+    shuffle(pool);
     problems = [];
-    while (problems.length < COUNT) {
-      order.forEach(function (f) {
-        if (quota[f] > 0) { problems.push(pick(f)); quota[f]--; }
-      });
+    if (COUNT <= pool.length) {
+      problems = pool.slice(0, COUNT);
+    } else {
+      problems = pool.slice();
+      var i = 0;
+      while (problems.length < COUNT) {
+        problems.push(pool[i % pool.length].slice());
+        i++;
+      }
     }
     shuffle(problems);
     answers = new Array(problems.length).fill(null);
