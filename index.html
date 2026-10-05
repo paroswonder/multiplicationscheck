@@ -305,6 +305,11 @@
       .map(function (c) { return +c.value; });
     COUNT = parseInt($('cfgCount').value, 10);
     includeEasy = $('includeEasy').checked;
+    // without easy problems, drop the 0s and 1s tables too (unless they are the only ones picked)
+    if (!includeEasy) {
+      var hard = selFactors.filter(function (f) { return f > 1; });
+      if (hard.length) selFactors = hard;
+    }
     TOTAL = (parseInt($('cfgMinutes').value, 10) || 0) * 60;
     var err = '';
     if (!selFactors.length) err = 'Pick at least one times table.';
