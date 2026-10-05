@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap" rel="stylesheet">
-<title>Multiplication Quiz</title>
+<title>No Nonsense Times Tables Quiz</title>
 <style>
   /* Colours, fonts and animation timings */
   :root {
@@ -119,6 +119,7 @@
   .review.slow { max-height: none; }
   .review .secs { font-weight: 500; font-variant-numeric: tabular-nums; }
   #startActions { margin-top: 0; }
+  .kicker { display: block; font-size: .6em; line-height: 1.1; }
   .easy.key-opt { justify-content: center; margin: 0 0 12px; }
 
   /* Printable worksheet: only shown when printing */
@@ -146,7 +147,7 @@
 
   <!-- SETTINGS / START -->
   <div id="screen-start" class="center">
-    <h1>Multiplication Quiz</h1>
+    <h1><span class="kicker">No Nonsense</span>Times Tables Quiz</h1>
     <p class="sub">Pick your times tables, set the size, then race the clock<br>Press Enter to move on — if a timer runs out it turns amber and waits for you</p>
 
     <div class="card">
@@ -171,7 +172,7 @@
 
     <p id="perPreview">10s <span>per problem &nbsp;·&nbsp; 10 min ÷ 60 problems</span></p>
     <p id="cfgError"></p>
-    <label class="easy key-opt"><input type="checkbox" id="printKey" checked>Print the answer key on a second page</label>
+    <label class="easy key-opt"><input type="checkbox" id="printKey">Print the answer key on a second page</label>
     <div class="actions" id="startActions">
       <button class="btn secondary" id="printBtn">Print worksheet</button>
       <button class="btn" id="startBtn">Start test</button>
@@ -566,7 +567,7 @@
       return html + '</div></div>';
     }
 
-    $('printSheet').innerHTML = page('Multiplication Quiz', false) +
+    $('printSheet').innerHTML = page('<span class="kicker">No Nonsense</span>Times Tables Quiz', false) +
       ($('printKey').checked ? page('Answer Key', true) : '');
     window.print();
   }
