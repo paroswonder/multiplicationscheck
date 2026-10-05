@@ -118,6 +118,30 @@
   #slowWrap { margin-bottom: 20px; }
   .review.slow { max-height: none; }
   .review .secs { font-weight: 500; font-variant-numeric: tabular-nums; }
+  #startActions { margin-top: 0; }
+  .easy.key-opt { justify-content: center; margin: 0 0 12px; }
+
+  /* Printable worksheet: only shown when printing */
+  #printSheet { display: none; }
+  .ws-page { font-family: var(--font-sans); color: #000; }
+  .ws-page + .ws-page { break-before: page; page-break-before: always; }
+  .ws-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 4px; }
+  .ws-head h2 { font-family: "Schoolbell", "Chalkboard SE", "Comic Sans MS", cursive; font-size: 28px; font-weight: 400; margin: 0; }
+  .ws-stamp { font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+  .ws-info { display: flex; justify-content: space-between; gap: 16px; font-size: 12px; margin: 6px 0 14px; }
+  .ws-fill { display: inline-block; width: 160px; border-bottom: 1px solid #000; }
+  .ws-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 18px; }
+  .ws-q { display: flex; align-items: baseline; gap: 6px; padding: 5px 0; break-inside: avoid; }
+  .ws-q .n { font-size: 10px; color: #666; width: 22px; text-align: right; font-variant-numeric: tabular-nums; }
+  .ws-q .expr { font-family: "Schoolbell", "Chalkboard SE", "Comic Sans MS", cursive; font-size: 18px; white-space: nowrap; }
+  .ws-q .blank { flex: 1; min-width: 36px; border-bottom: 1px solid #000; height: 18px; }
+  .ws-q .key { font-weight: 600; font-variant-numeric: tabular-nums; }
+  @media print {
+    @page { margin: 14mm; }
+    body { padding: 0; background: #fff; }
+    #app { display: none !important; }
+    #printSheet { display: block; }
+  }
 </style>
 
   <!-- SETTINGS / START -->
@@ -147,7 +171,11 @@
 
     <p id="perPreview">10s <span>per problem &nbsp;·&nbsp; 10 min ÷ 60 problems</span></p>
     <p id="cfgError"></p>
-    <button class="btn" id="startBtn">Start test</button>
+    <label class="easy key-opt"><input type="checkbox" id="printKey" checked>Print the answer key on a second page</label>
+    <div class="actions" id="startActions">
+      <button class="btn secondary" id="printBtn">Print worksheet</button>
+      <button class="btn" id="startBtn">Start test</button>
+    </div>
   </div>
 
   <!-- QUIZ -->
@@ -193,6 +221,8 @@
     </div>
   </div>
 </div>
+
+<div id="printSheet"></div>
 
 <script>
 (function () {
@@ -512,6 +542,36 @@
     show('screen-results');
   }
 
+  /* ---- printable worksheet (problems page + answer key page) ---- */
+  function printWorksheet() {
+    if (!readSettings()) return;
+    makeProblems();
+    var now = new Date();
+    var stamp = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) +
+      '<br>' + now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+    var tables = selFactors.slice().sort(function (a, b) { return a - b; }).join(', ');
+    var info = '<div class="ws-info"><span>Times tables: ' + tables + ' &nbsp;·&nbsp; ' + problems.length +
+      ' problems &nbsp;·&nbsp; Suggested time: ' + (TOTAL / 60) + ' min</span>';
+
+    function page(title, withKey) {
+      var html = '<div class="ws-page"><div class="ws-head"><h2>' + title + '</h2>' +
+        '<div class="ws-stamp">' + stamp + '</div></div>' + info +
+        (withKey ? '</div>' : '<span>Name <span class="ws-fill"></span></span></div>') +
+        '<div class="ws-grid">';
+      problems.forEach(function (p, i) {
+        html += '<div class="ws-q"><span class="n">' + (i + 1) + '.</span>' +
+          '<span class="expr">' + p[0] + ' &times; ' + p[1] + ' =</span>' +
+          (withKey ? '<span class="key">' + (p[0] * p[1]) + '</span>' : '<span class="blank"></span>') + '</div>';
+      });
+      return html + '</div></div>';
+    }
+
+    $('printSheet').innerHTML = page('Multiplication Quiz', false) +
+      ($('printKey').checked ? page('Answer Key', true) : '');
+    window.print();
+  }
+
+  $('printBtn').addEventListener('click', printWorksheet);
   $('startBtn').addEventListener('click', function () { if (readSettings()) start(); });
   $('againBtn').addEventListener('click', start);
   $('restartBtn').addEventListener('click', function () { clearInterval(tick); clearInterval(ptick); show('screen-start'); });
